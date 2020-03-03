@@ -1,5 +1,6 @@
-![](coronavirus.gif)
+![](name-of-giphy.gif)
 ![Logo of the project](https://github.com/sukuzhanay/Karatsuba/blob/master/UEM-Logo.png)
+
 
 # Corona Virus Chat
 Con el objeto de no hablarnos a la cara usaremos la comunicación electrónica mediante este chat para evitar el coronavirus

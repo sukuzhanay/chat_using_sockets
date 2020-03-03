@@ -1,3 +1,4 @@
+![](coronavirus.gif)
 ![Logo of the project](https://github.com/sukuzhanay/Karatsuba/blob/master/UEM-Logo.png)
 
 # Corona Virus Chat

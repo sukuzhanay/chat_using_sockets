@@ -1,11 +1,12 @@
+![](coronavirus.gif)
 ![Logo of the project](https://github.com/sukuzhanay/Karatsuba/blob/master/UEM-Logo.png)
 
-# Karatsuba algorithm
+# Corona Virus Chat
+Con el objeto de no hablarnos a la cara usaremos la comunicación electrónica mediante este chat para evitar el coronavirus
 
 ```shell
-karatsuba_XL_XS.py .- Algoritmo de karatsuba implementado en 2 versiones para números grandes ( karatsuba_big ) y para números pequeños (karatsuba_small) )con sus respectivas comparaciones, además se obtiene el resultado también por el intérprete.
+cliente.py .- Implementa las peticiones del cliente al servidor usando sockets e hilos
 
-karatsuba.py.- Versión antigua; ignorarla
+servidor.py.- Recibe las peticiones de múltiples clientes y las guarda en una array; para atender a los clientes hace uso de hilos
 
-karatsuba_graph.py .- Programa que nos permite obtener la evolución del tiempo de ejecución mediante una gráfica que nos generará un archivo PNG.
 ```

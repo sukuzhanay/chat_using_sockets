@@ -6,36 +6,30 @@ import os
 
 class Cliente():
 
-	def __init__(self, host=socket.gethostname(), port=59989):
-		self.sock = socket.socket()
-		self.sock.connect((str(host), int(port)))
-		hilo_recv_mensaje = threading.Thread(target=self.recibir)
-		hilo_recv_mensaje.daemon = True
-		hilo_recv_mensaje.start()
-		print('Hilo con PID',os.getpid())
-		print('Hilos activos', threading.active_count())
+	def __init__(self, host=input("Intoduzca la ip del servidor ?  "), port=int(input(" Intoduzca el puerto del servidor ?"))):
+		self.s = socket.socket()
+		self.s.connect((host, int(port)))
+		threading.Thread(target=self.recibir, daemon=True).start()
+		print('Hilo con PID = ',os.getpid(), ' y total Hilos activos =', threading.active_count())
 
 		while True:
-			msg = input('\nEscriba texto ? ** Enviar = ENTER ** Abandonar Chat = Q \n')
-			if msg != 'Q' :
-				self.enviar(msg)
+			msg = input('\nEscriba texto ?   ** Enviar = ENTER   ** Salir Chat = 1 \n')
+			if msg != '1' : self.enviar(msg)
 			else:
-				print(" **** TALOGOOO  ****")
-				self.sock.close()
+				print(" **** Me piro vampiro; cerrando socket = ", s.getpid())
+				self.s.close()
 				sys.exit()
 
 	def recibir(self):
 		while True:
 			try:
-				data = self.sock.recv(32)
-				if data:
-					print(pickle.loads(data))
-			except:
-				pass
+				data = self.s.recv(32)
+				if data: print(pickle.loads(data))
+			except: pass
 
 	def enviar(self, msg):
-		self.sock.send(pickle.dumps(msg))
+		self.s.send(pickle.dumps(msg))
 
-c = Cliente()
+arrancar = Cliente()
 
 		

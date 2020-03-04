@@ -5,59 +5,53 @@ import pickle
 import os
 
 class Servidor():
-	def __init__(self, host=socket.gethostname(), port=59989):
+
+	def __init__(self, host=socket.gethostname(), port=int(input("Que puerto quiere usar "))):
 		self.clientes = []
-		self.sock = socket.socket()
-		self.sock.bind((str(host), int(port)))
-		self.sock.listen(20)
-		self.sock.setblocking(False)
+		print('\nSu ip actual es : ',socket.gethostbyname(host))
+		self.s = socket.socket()
+		self.s.bind((str(host), int(port)))
+		self.s.listen(30)
+		self.s.setblocking(False)
 
-		aceptar = threading.Thread(target=self.aceptarC)
-		procesar = threading.Thread(target=self.procesarC)
-		
-		aceptar.daemon = True
-		aceptar.start()
-
-		procesar.daemon = True
-		procesar.start()
+		threading.Thread(target=self.aceptarC, daemon=True).start()
+		threading.Thread(target=self.procesarC, daemon=True).start()
 
 		while True:
-			msg = input('SALIR = Q\n')
-			if msg == 'Q':
-				print("**** TALOGOOO *****")
-				self.sock.close()
+			msg = input('\n << SALIR = 1 >> \n')
+			if msg == '1':
+				print("Apagando el servidor")
+				self.s.close()
 				sys.exit()
-			else:
-				pass
-
-	def broadcast(self, msg, cliente):
-		for c in self.clientes:
-			try:
-				if c != cliente:
-					c.send(msg)
-			except:
-				self.clientes.remove(c)
+			else: pass
 
 	def aceptarC(self):
+		print("\t____Hilo que acepta conexiones iniciado en modo DAEMON\n")
 		while True:
 			try:
-				conn, addr = self.sock.accept()
-				print(f"\nConexion aceptada via {conn}\n")
+				conn, addr = self.s.accept()
+				print(f"\nConexion aceptada via {addr}\n")
 				conn.setblocking(False)
 				self.clientes.append(conn)
-			except:
-				pass
+			except: pass
 
 	def procesarC(self):
-		print("Procesamiento de mensajes iniciado")
+		print("\t____Hilo que procesa mensajes  iniciado en modo DAEMON\n")
 		while True:
 			if len(self.clientes) > 0:
 				for c in self.clientes:
 					try:
 						data = c.recv(32)
-						if data:
-							self.broadcast(data,c)
-					except:
-						pass
+						if data: self.broadcast(data,c)
+					except: pass
 
-s = Servidor()
+	def broadcast(self, msg, cliente):
+		for c in self.clientes:
+			print("Clientes conectados rigth now = ", len(self.clientes))
+			try:
+				if c != cliente: 
+					print(pickle.loads(msg))
+					c.send(msg)
+			except: self.clientes.remove(c)
+
+arrancar = Servidor()

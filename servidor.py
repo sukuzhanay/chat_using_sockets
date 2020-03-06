@@ -6,9 +6,10 @@ import os
 
 class Servidor():
 
-	def __init__(self, host=socket.gethostname(), port=int(input("Que puerto quiere usar "))):
+	def __init__(self, host=socket.gethostname(), port=int(input("Que puerto quiere usar ? "))):
 		self.clientes = []
-		print('\nSu ip actual es : ',socket.gethostbyname(host))
+		print('\nSu IP actual es : ',socket.gethostbyname(host))
+		print('\n\tProceso con PID = ',os.getpid(), '\n\tHilo PRINCIPAL con ID =',threading.currentThread().getName(), '\n\tHilo en modo DAEMON = ', threading.currentThread().isDaemon(), '\n\tTotal Hilos activos en este punto del programa =', threading.active_count())
 		self.s = socket.socket()
 		self.s.bind((str(host), int(port)))
 		self.s.listen(30)
@@ -20,13 +21,14 @@ class Servidor():
 		while True:
 			msg = input('\n << SALIR = 1 >> \n')
 			if msg == '1':
-				print("Apagando el servidor")
+				print(" **** Me piro vampiro; cierro socket y mato SERVER con PID = ", os.getpid())
 				self.s.close()
 				sys.exit()
 			else: pass
 
 	def aceptarC(self):
-		print("\t____Hilo que acepta conexiones iniciado en modo DAEMON\n")
+		print('\nHilo ACEPTAR con ID =',threading.currentThread().getName(), '\n\tHilo en modo DAEMON = ', threading.currentThread().isDaemon(),'\n\tPertenece al PROCESO con PID', os.getpid(), "\n\tHilos activos TOTALES ", threading.active_count())
+		
 		while True:
 			try:
 				conn, addr = self.s.accept()
@@ -36,7 +38,7 @@ class Servidor():
 			except: pass
 
 	def procesarC(self):
-		print("\t____Hilo que procesa mensajes  iniciado en modo DAEMON\n")
+		print('\nHilo PROCESAR con ID =',threading.currentThread().getName(), '\n\tHilo en modo DAEMON = ', threading.currentThread().isDaemon(),'\n\tPertenece al PROCESO con PID', os.getpid(), "\n\tHilos activos TOTALES ", threading.active_count())
 		while True:
 			if len(self.clientes) > 0:
 				for c in self.clientes:
@@ -47,11 +49,11 @@ class Servidor():
 
 	def broadcast(self, msg, cliente):
 		for c in self.clientes:
-			print("Clientes conectados rigth now = ", len(self.clientes))
+			print("Clientes conectados Right now = ", len(self.clientes))
 			try:
 				if c != cliente: 
 					print(pickle.loads(msg))
 					c.send(msg)
 			except: self.clientes.remove(c)
 
-arrancar = Servidor()
+arrancar = Servidor() 

@@ -6,21 +6,22 @@ import os
 
 class Cliente():
 
-	def __init__(self, host=input("Intoduzca la ip del servidor ?  "), port=int(input(" Intoduzca el puerto del servidor ?"))):
+	def __init__(self, host=input("Intoduzca la IP del servidor ?  "), port=int(input("Intoduzca el PUERTO del servidor ?  "))):
 		self.s = socket.socket()
 		self.s.connect((host, int(port)))
+		print('\n\tProceso con PID = ',os.getpid(), '\n\tHilo PRINCIPAL con ID =',threading.currentThread().getName(), '\n\tHilo en modo DAEMON = ', threading.currentThread().isDaemon(),'\n\tTotal Hilos activos en este punto del programa =', threading.active_count())
 		threading.Thread(target=self.recibir, daemon=True).start()
-		print('Hilo con PID = ',os.getpid(), ' y total Hilos activos =', threading.active_count())
 
 		while True:
 			msg = input('\nEscriba texto ?   ** Enviar = ENTER   ** Salir Chat = 1 \n')
 			if msg != '1' : self.enviar(msg)
 			else:
-				print(" **** Me piro vampiro; cerrando socket = ", s.getpid())
+				print(" **** Me piro vampiro; cierro socket y mato al CLIENTE con PID = ", os.getpid())
 				self.s.close()
 				sys.exit()
 
 	def recibir(self):
+		print('\nHilo RECIBIR con ID =',threading.currentThread().getName(), '\n\tPertenece al PROCESO con PID', os.getpid(), "\n\tHilos activos TOTALES ", threading.active_count())
 		while True:
 			try:
 				data = self.s.recv(32)
